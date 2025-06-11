@@ -1,38 +1,23 @@
-import { useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
 
-function DropZone({ onFilesSelected, dragOver, onDragOver, onDragLeave, onDrop, hasActiveUploads }) {
-  const fileInputRef = useRef(null);
-
-  const handleClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > 0) {
-      onFilesSelected(files);
-    }
-    // Reset input
-    e.target.value = '';
-  };
-
+const DropZoneArea = ({ dragOver, onClick, onDragOver, onDragLeave, onDrop, hasActiveUploads }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
       className="relative"
     >
       <div
-        onClick={handleClick}
+        onClick={onClick}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         className={`
           relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer
           transition-all duration-300 ease-out min-h-[300px] flex flex-col items-center justify-center
-          ${dragOver 
-            ? 'border-primary bg-gradient-to-br from-primary/5 to-secondary/5 scale-105 shadow-lg' 
+          ${dragOver
+            ? 'border-primary bg-gradient-to-br from-primary/5 to-secondary/5 scale-105 shadow-lg'
             : 'border-slate-300 hover:border-primary/50 hover:bg-gradient-to-br hover:from-slate-50 hover:to-slate-100'
           }
           ${hasActiveUploads ? 'opacity-75' : ''}
@@ -44,10 +29,10 @@ function DropZone({ onFilesSelected, dragOver, onDragOver, onDragLeave, onDrop, 
           transition-opacity duration-300
           ${dragOver ? 'opacity-100' : 'opacity-0'}
         `} />
-        
+
         {/* Animated upload icon */}
         <motion.div
-          animate={dragOver ? { 
+          animate={dragOver ? {
             scale: [1, 1.2, 1],
             rotate: [0, 5, -5, 0]
           } : {
@@ -60,14 +45,14 @@ function DropZone({ onFilesSelected, dragOver, onDragOver, onDragLeave, onDrop, 
           }}
           className={`
             relative z-10 w-20 h-20 rounded-full flex items-center justify-center mb-6
-            ${dragOver 
-              ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-lg' 
+            ${dragOver
+              ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-lg'
               : 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400'
             }
           `}
         >
-          <ApperIcon 
-            name={dragOver ? "Upload" : "FolderOpen"} 
+          <ApperIcon
+            name={dragOver ? "Upload" : "FolderOpen"}
             className="w-10 h-10"
           />
         </motion.div>
@@ -80,14 +65,14 @@ function DropZone({ onFilesSelected, dragOver, onDragOver, onDragLeave, onDrop, 
           `}>
             {dragOver ? 'Drop files here' : 'Drag & drop files'}
           </h3>
-          
+
           <p className="text-slate-500 text-lg">
             or <span className="text-primary font-medium underline">browse from your device</span>
           </p>
-          
+
           <div className="flex flex-wrap justify-center gap-2 mt-4">
             {['Images', 'Videos', 'Documents', 'Audio'].map((type) => (
-              <span 
+              <span
                 key={type}
                 className="px-3 py-1 text-sm bg-white/50 text-slate-600 rounded-full border border-slate-200"
               >
@@ -95,7 +80,7 @@ function DropZone({ onFilesSelected, dragOver, onDragOver, onDragLeave, onDrop, 
               </span>
             ))}
           </div>
-          
+
           <p className="text-xs text-slate-400 mt-4">
             Maximum file size: 100MB
           </p>
@@ -111,18 +96,8 @@ function DropZone({ onFilesSelected, dragOver, onDragOver, onDragLeave, onDrop, 
           />
         )}
       </div>
-
-      {/* Hidden file input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        onChange={handleFileSelect}
-        className="hidden"
-        accept="image/*,video/*,audio/*,application/pdf,text/*,application/zip,application/x-rar-compressed"
-      />
     </motion.div>
   );
-}
+};
 
-export default DropZone;
+export default DropZoneArea;

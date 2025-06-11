@@ -1,14 +1,17 @@
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import FileCard from './FileCard';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import FileCard from '@/components/molecules/FileCard';
 
-function FileList({ files, title, loading, onAction }) {
+function RecentUploads({ uploads, loading }) {
   if (loading) {
     return (
       <div className="space-y-4">
-        <h2 className="text-xl font-heading font-semibold text-slate-700">
-          {title}
+        <h2 className="text-xl font-heading font-semibold text-slate-700 flex items-center space-x-2">
+          <ApperIcon name="Clock" className="w-5 h-5 text-primary" />
+          <span>Recent Uploads</span>
         </h2>
+
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
             <motion.div
@@ -32,7 +35,7 @@ function FileList({ files, title, loading, onAction }) {
     );
   }
 
-  if (files.length === 0) {
+  if (uploads.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -47,39 +50,38 @@ function FileList({ files, title, loading, onAction }) {
           <ApperIcon name="FolderOpen" className="w-8 h-8 text-slate-400" />
         </motion.div>
         <div>
-          <h3 className="text-lg font-heading font-medium text-slate-600">No files yet</h3>
-          <p className="text-slate-500 mt-1">Upload your first file to get started</p>
+          <h3 className="text-lg font-heading font-medium text-slate-600">No recent uploads</h3>
+          <p className="text-slate-500 mt-1">Your uploaded files will appear here</p>
         </div>
-        {onAction && (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onAction}
-            className="mt-4 px-6 py-2 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            Upload Files
-          </motion.button>
-        )}
       </motion.div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-heading font-semibold text-slate-700">
-        {title}
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-heading font-semibold text-slate-700 flex items-center space-x-2">
+          <ApperIcon name="Clock" className="w-5 h-5 text-primary" />
+          <span>Recent Uploads</span>
+          <span className="text-sm font-normal text-slate-500">
+            (Last 24 hours)
+          </span>
+        </h2>
+      </div>
+
       <div className="space-y-3 max-w-full overflow-hidden">
         <AnimatePresence>
-          {files.map((file, index) => (
+          {uploads.map((upload, index) => (
             <motion.div
-              key={file.id}
+              key={upload.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.1 }}
             >
-              <FileCard upload={file} />
+              <FileCard
+                upload={upload}
+                showActions={false}
+              />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -88,4 +90,4 @@ function FileList({ files, title, loading, onAction }) {
   );
 }
 
-export default FileList;
+export default RecentUploads;

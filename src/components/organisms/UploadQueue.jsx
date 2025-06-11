@@ -1,9 +1,10 @@
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ApperIcon from './ApperIcon';
-import FileCard from './FileCard';
+import ApperIcon from '@/components/ApperIcon';
+import FileCard from '@/components/molecules/FileCard';
 
 function UploadQueue({ uploads, onPause, onResume, onCancel }) {
-  const activeUploads = uploads.filter(upload => 
+  const activeUploads = uploads.filter(upload =>
     upload.status === 'queued' || upload.status === 'uploading' || upload.status === 'paused'
   );
 

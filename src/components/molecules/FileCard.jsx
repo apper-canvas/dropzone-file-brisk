@@ -1,8 +1,11 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
-import { formatFileSize, getFileIcon } from '../utils/fileUtils';
+import ApperIcon from '@/components/ApperIcon';
+import ProgressBar from '@/components/atoms/ProgressBar';
+import Button from '@/components/atoms/Button';
+import { formatFileSize, getFileIcon } from '@/utils/fileUtils';
 
-function FileCard({ upload, onPause, onResume, onCancel, showActions = false }) {
+const FileCard = ({ upload, onPause, onResume, onCancel, showActions = false }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed':
@@ -88,17 +91,7 @@ function FileCard({ upload, onPause, onResume, onCancel, showActions = false }) 
                 <span>{upload.progress.toFixed(0)}%</span>
                 <span>{upload.status === 'uploading' ? 'Uploading...' : 'Paused'}</span>
               </div>
-              <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${upload.progress}%` }}
-                  transition={{ duration: 0.3 }}
-                  className="h-full bg-gradient-to-r from-primary to-secondary relative"
-                >
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-50 blur-sm" />
-                </motion.div>
-              </div>
+              <ProgressBar progress={upload.progress} className="h-2" />
             </div>
           )}
 
@@ -113,44 +106,44 @@ function FileCard({ upload, onPause, onResume, onCancel, showActions = false }) 
           {showActions && (upload.status === 'uploading' || upload.status === 'paused' || upload.status === 'queued') && (
             <div className="flex items-center space-x-2 pt-1">
               {upload.status === 'uploading' && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <Button
                   onClick={onPause}
                   className="flex items-center space-x-1 px-2 py-1 text-xs bg-warning/10 text-warning rounded-lg hover:bg-warning/20 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <ApperIcon name="Pause" className="w-3 h-3" />
                   <span>Pause</span>
-                </motion.button>
+                </Button>
               )}
 
               {upload.status === 'paused' && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <Button
                   onClick={onResume}
                   className="flex items-center space-x-1 px-2 py-1 text-xs bg-info/10 text-info rounded-lg hover:bg-info/20 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <ApperIcon name="Play" className="w-3 h-3" />
                   <span>Resume</span>
-                </motion.button>
+                </Button>
               )}
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <Button
                 onClick={onCancel}
                 className="flex items-center space-x-1 px-2 py-1 text-xs bg-error/10 text-error rounded-lg hover:bg-error/20 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <ApperIcon name="X" className="w-3 h-3" />
                 <span>Cancel</span>
-              </motion.button>
+              </Button>
             </div>
           )}
         </div>
       </div>
     </motion.div>
   );
-}
+};
 
 export default FileCard;

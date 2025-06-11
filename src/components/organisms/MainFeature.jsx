@@ -1,12 +1,10 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import DropZone from './DropZone';
-import FileList from './FileList';
-import UploadQueue from './UploadQueue';
-import RecentUploads from './RecentUploads';
-import { fileUploadService } from '../services';
-import ApperIcon from './ApperIcon';
+import DropZone from '@/components/organisms/DropZone';
+import UploadQueue from '@/components/organisms/UploadQueue';
+import RecentUploads from '@/components/organisms/RecentUploads';
+import { fileUploadService } from '@/services';
 
 function MainFeature({ onUploadStart, onUploadProgress, onUploadComplete, recentUploads, loading }) {
   const [activeUploads, setActiveUploads] = useState([]);
@@ -83,31 +81,36 @@ function MainFeature({ onUploadStart, onUploadProgress, onUploadComplete, recent
   const startUpload = async (uploadFile) => {
     try {
       // Update status to uploading
-      setActiveUploads(prev => prev.map(f => 
+      setActiveUploads(prev => prev.map(f =>
         f.id === uploadFile.id ? { ...f, status: 'uploading' } : f
       ));
 
       // Simulate upload with progress
       const result = await fileUploadService.uploadFile(uploadFile.file, (progress) => {
-        setActiveUploads(prev => prev.map(f => 
+        setActiveUploads(prev => prev.map(f =>
           f.id === uploadFile.id ? { ...f, progress } : f
         ));
-        
-        // Calculate total progress
-        const totalUploaded = prev.reduce((sum, f) => {
-          if (f.status === 'completed') return sum + f.size;
-          if (f.status === 'uploading') return sum + (f.size * f.progress / 100);
-          return sum;
+
+        // Calculate total progress from all active uploads for HomePage
+        const currentActiveUploads = activeUploads.map(f =>
+            f.id === uploadFile.id ? { ...f, progress } : f
+        );
+        const totalUploadedBytes = currentActiveUploads.reduce((sum, f) => {
+            if (f.status === 'completed') return sum + f.size;
+            if (f.status === 'uploading') return sum + (f.size * f.progress / 100);
+            return sum;
         }, 0);
-        
-        const totalSize = prev.reduce((sum, f) => sum + f.size, 0);
-        onUploadProgress(totalUploaded, totalSize);
+        const totalSessionSize = currentActiveUploads.reduce((sum, f) => sum + f.size, 0);
+
+        if (totalSessionSize > 0) {
+            onUploadProgress(totalUploadedBytes, totalSessionSize);
+        }
       });
 
       // Update status to completed
-      setActiveUploads(prev => prev.map(f => 
-        f.id === uploadFile.id ? { 
-          ...f, 
+      setActiveUploads(prev => prev.map(f =>
+        f.id === uploadFile.id ? {
+          ...f,
           status: 'completed',
           progress: 100,
           uploadedAt: Date.now()
@@ -129,9 +132,9 @@ function MainFeature({ onUploadStart, onUploadProgress, onUploadComplete, recent
 
     } catch (error) {
       console.error('Upload failed:', error);
-      setActiveUploads(prev => prev.map(f => 
-        f.id === uploadFile.id ? { 
-          ...f, 
+      setActiveUploads(prev => prev.map(f =>
+        f.id === uploadFile.id ? {
+          ...f,
           status: 'error',
           error: error.message || 'Upload failed'
         } : f
@@ -141,7 +144,7 @@ function MainFeature({ onUploadStart, onUploadProgress, onUploadComplete, recent
   };
 
   const handlePauseUpload = (id) => {
-    setActiveUploads(prev => prev.map(f => 
+    setActiveUploads(prev => prev.map(f =>
       f.id === id ? { ...f, status: 'paused' } : f
     ));
     toast.info('Upload paused');
@@ -150,7 +153,7 @@ function MainFeature({ onUploadStart, onUploadProgress, onUploadComplete, recent
   const handleResumeUpload = (id) => {
     const uploadFile = activeUploads.find(f => f.id === id);
     if (uploadFile) {
-      setActiveUploads(prev => prev.map(f => 
+      setActiveUploads(prev => prev.map(f =>
         f.id === id ? { ...f, status: 'uploading' } : f
       ));
       // Continue upload from where it left off
@@ -176,7 +179,7 @@ function MainFeature({ onUploadStart, onUploadProgress, onUploadComplete, recent
   const handleDrop = useCallback((e) => {
     e.preventDefault();
     setDragOver(false);
-    
+
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
       handleFilesSelected(files);
