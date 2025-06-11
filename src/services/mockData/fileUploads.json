@@ -1,0 +1,57 @@
+[
+  {
+    "id": "upload_001",
+    "name": "presentation-slides.pptx",
+    "size": 15728640,
+    "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": 1703875200000,
+    "preview": null,
+    "error": null
+  },
+  {
+    "id": "upload_002",
+    "name": "vacation-photos.zip",
+    "size": 52428800,
+    "type": "application/zip",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": 1703872800000,
+    "preview": null,
+    "error": null
+  },
+  {
+    "id": "upload_003",
+    "name": "project-proposal.pdf",
+    "size": 2097152,
+    "type": "application/pdf",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": 1703869200000,
+    "preview": null,
+    "error": null
+  },
+  {
+    "id": "upload_004",
+    "name": "demo-video.mp4",
+    "size": 87654321,
+    "type": "video/mp4",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": 1703865600000,
+    "preview": null,
+    "error": null
+  },
+  {
+    "id": "upload_005",
+    "name": "meeting-notes.docx",
+    "size": 1048576,
+    "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": 1703862000000,
+    "preview": null,
+    "error": null
+  }
+]
