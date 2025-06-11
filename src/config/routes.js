@@ -1,9 +1,9 @@
 import HomePage from '@/components/pages/HomePage';
 
 export const routes = {
-  home: {
+home: {
     id: 'home',
-    label: 'DropZone',
+    label: 'Bhushan',
     path: '/',
     icon: 'Upload',
 component: HomePage
