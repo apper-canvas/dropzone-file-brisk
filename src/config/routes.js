@@ -3,10 +3,10 @@ import HomePage from '@/components/pages/HomePage';
 export const routes = {
 home: {
     id: 'home',
-    label: 'Bhushan',
+    label: 'Test1',
     path: '/',
     icon: 'Upload',
-component: HomePage
+    component: HomePage
   }
 };
 

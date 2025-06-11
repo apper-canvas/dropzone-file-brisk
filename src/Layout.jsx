@@ -13,7 +13,7 @@ function Layout() {
                 <ApperIcon name="Upload" className="w-5 h-5 text-white" />
               </div>
 <h1 className="text-xl font-heading font-bold gradient-text">
-                Bhushan
+                Test1
               </h1>
             </div>
             <div className="flex items-center space-x-4">
